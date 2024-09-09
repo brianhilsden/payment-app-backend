@@ -2,6 +2,7 @@ from models import Seller,Admin,Buyer, Transaction
 from config import app,Resource,api,make_response,request,db
 from flask_jwt_extended import create_access_token, get_jwt_identity, current_user, jwt_required, JWTManager
 from flask import Flask,jsonify
+import uuid
 
 app.config["JWT_SECRET_KEY"] = "b'Y\xf1Xz\x01\xad|eQ\x80t \xca\x1a\x10K'"  
 app.config['JWT_TOKEN_LOCATION'] = ['headers']
@@ -169,6 +170,7 @@ class TransactionClass(Resource):
     """ @jwt_required() """
     def post(self):
         data = request.get_json()
+        token = str(uuid.uuid4())
         
 
         transaction = Transaction(
@@ -176,17 +178,33 @@ class TransactionClass(Resource):
             product_name = data.get("product_name"),
             quantity = int(data.get("quantity")),
             total_price = int(data.get("total_price")),
-            seller_id = current_user.id
+            seller_id = current_user.id,
+            token = token
 
         )
 
         db.session.add(transaction)
         db.session.commit()
+        transaction_link = f"https://payment-app-backend-lemon.vercel.app/transaction/{token}"
 
-        response = make_response(transaction.to_dict(), 201)
+        response = make_response(
+            {
+                "transaction":transaction.to_dict(),
+                "transaction_link": f"https://payment-app-backend-lemon.vercel.app/transaction/{token}"
+            },
+            201
+        )
         return response
     
 api.add_resource(TransactionClass,"/transactions")
+
+
+@app.route('/transactionByToken/<token>', methods=['GET'])
+def get_transaction_by_token(token):
+    transaction = Transaction.query.filter_by(token=token).first()  
+    if transaction:
+        return make_response(transaction.to_dict(), 200)
+    return jsonify({'error': 'Transaction not found'}), 404
         
 
 

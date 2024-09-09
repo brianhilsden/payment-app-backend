@@ -96,6 +96,7 @@ class Transaction(SerializerMixin,db.Model):
     buyer_id = db.Column(db.Integer, db.ForeignKey("buyers.id"))
     seller_id = db.Column(db.Integer, db.ForeignKey("sellers.id"))
     purchase_link = db.Column(db.String)
+    token = db.Column(db.String)
 
     buyer = db.relationship("Buyer", back_populates = "transactions")
     seller = db.relationship("Seller", back_populates ="transactions")

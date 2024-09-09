@@ -1,0 +1,271 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "This is the API documentation for the multi-role authentication and transaction management system.",
+      "version": "1.0.0",
+      "title": "Multi-role API"
+    },
+    "host": "localhost:5555",
+    "basePath": "/",
+    "schemes": [
+      "http"
+    ],
+    "paths": {
+      "/signup": {
+        "post": {
+          "tags": ["Authentication"],
+          "summary": "Sign up for a new account",
+          "description": "Allows Admin, Buyer, and Seller roles to sign up for a new account.",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User details for signing up",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "required": ["username", "email", "password", "phone_number", "role"],
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "phone_number": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["Admin", "Buyer", "Seller"]
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "User created successfully"
+            },
+            "422": {
+              "description": "Error creating user"
+            },
+            "400": {
+              "description": "Invalid role"
+            }
+          }
+        }
+      },
+      "/login": {
+        "post": {
+          "tags": ["Authentication"],
+          "summary": "Login to the system",
+          "description": "Allows Admin, Buyer, and Seller roles to log in and receive a JWT token.",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User credentials for login",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "required": ["email", "password", "role"],
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["Admin", "Buyer", "Seller"]
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "User logged in successfully"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "400": {
+              "description": "Invalid role"
+            }
+          }
+        }
+      },
+      "/check_session": {
+        "get": {
+          "tags": ["Authentication"],
+          "summary": "Check user session",
+          "description": "Checks the current session of the logged-in user.",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Session is valid"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/transaction/{id}": {
+        "get": {
+          "tags": ["Transaction"],
+          "summary": "Get transaction by ID",
+          "description": "Fetch a specific transaction by ID.",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "integer",
+              "description": "ID of the transaction"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Transaction found"
+            },
+            "404": {
+              "description": "Transaction not found"
+            }
+          }
+        },
+        "patch": {
+          "tags": ["Transaction"],
+          "summary": "Update transaction by ID",
+          "description": "Updates the details of a specific transaction by ID.",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "integer",
+              "description": "ID of the transaction"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Updated transaction details",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "product_name": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  },
+                  "total_price": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Transaction updated"
+            },
+            "404": {
+              "description": "Transaction not found"
+            }
+          }
+        }
+      },
+      "/transactions": {
+        "get": {
+          "tags": ["Transaction"],
+          "summary": "Get all transactions",
+          "description": "Fetch all transactions.",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of transactions"
+            }
+          }
+        },
+        "post": {
+          "tags": ["Transaction"],
+          "summary": "Create a new transaction",
+          "description": "Create a new transaction for the logged-in Seller.",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Transaction details",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "required": ["message", "product_name", "quantity", "total_price"],
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "product_name": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  },
+                  "total_price": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Transaction created successfully"
+            }
+          }
+        }
+      }
+    },
+    "securityDefinitions": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+      }
+    }
+  }
+  

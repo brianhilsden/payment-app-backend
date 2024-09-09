@@ -64,6 +64,7 @@ def seed_data():
         buyer2.password_hash = "buyerpassword2"
 
         db.session.add_all([admin1, admin2, seller1, seller2, buyer1, buyer2])
+        db.session.commit()
 
 
         # Seed Transactions

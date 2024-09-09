@@ -185,7 +185,6 @@ class TransactionClass(Resource):
 
         db.session.add(transaction)
         db.session.commit()
-        transaction_link = f"https://payment-app-backend-lemon.vercel.app/transaction/{token}"
 
         response = make_response(
             {

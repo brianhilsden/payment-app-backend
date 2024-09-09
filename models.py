@@ -13,6 +13,10 @@ class Seller(SerializerMixin,db.Model):
     role = db.Column(db.String, default = "Seller")
     phone_number = db.Column(db.String)
     _password_hash = db.Column(db.String)
+
+    transactions = db.relationship("Transaction", back_populates = "seller")
+
+    serialize_rules = ("transactions.seller",)
    
 
     @hybrid_property
@@ -37,9 +41,6 @@ class Admin(SerializerMixin,db.Model):
     _password_hash = db.Column(db.String)
     role = db.Column(db.String, default = "Admin")
 
-    transactions = db.relationship("Transaction", back_populates = "seller")
-
-    serialize_rules = ("transactions.seller",)
 
     
 
@@ -96,8 +97,9 @@ class Transaction(SerializerMixin,db.Model):
     seller_id = db.Column(db.Integer, db.ForeignKey("sellers.id"))
     purchase_link = db.Column(db.String)
 
-    customer = db.relationship("Customer", back_populates = "transactions")
+    buyer = db.relationship("Buyer", back_populates = "transactions")
     seller = db.relationship("Seller", back_populates ="transactions")
+  
 
-    serialize_rules = ("-customer.transactions","-seller.transactions" )
+    serialize_rules = ("-buyer.transactions","-seller.transactions" )
     

@@ -59,6 +59,7 @@ class SignUp(Resource):
     @api.expect(signup_model)
     @api.response(201, 'User created successfully')
     @api.response(422, 'Validation Error')
+    @api.doc(tags=["Authentication"])
     def post(self):
         """Sign up a new user (Admin, Seller, Buyer)"""
         data = request.get_json()
@@ -166,6 +167,17 @@ class TransactionsById(Resource):
             return make_response(transaction.to_dict(), 200)
         return make_response({"error": "Transaction not found"}, 404)
 
+    """ @jwt_required() """
+    @api.response(200, 'Transaction deleted')
+    @api.response(404, 'Transaction not found')
+    def delete(self, id):
+        """Delete a transaction by ID"""
+        transaction = Transaction.query.filter_by(id=id).first()
+        if transaction:
+            db.session.delete(transaction)
+            db.session.commit()
+            return make_response({"message": "Transaction deleted"}, 200)
+        return make_response({"error": "Transaction not found"}, 404)
 
 @api.route('/transactions')
 class TransactionClass(Resource):

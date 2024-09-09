@@ -63,6 +63,9 @@ def seed_data():
         )
         buyer2.password_hash = "buyerpassword2"
 
+        db.session.add_all([admin1, admin2, seller1, seller2, buyer1, buyer2])
+
+
         # Seed Transactions
         transaction1 = Transaction(
             message="First transaction",
@@ -70,8 +73,8 @@ def seed_data():
             quantity=2,
             total_price=2000,
             status="Pending",
-            buyer_id=1,  # Assuming buyer1 is saved with ID 1
-            seller_id=1,  # Assuming seller1 is saved with ID 1
+            buyer_id=buyer1.id,  # Assuming buyer1 is saved with ID 1
+            seller_id=seller1.id,  # Assuming seller1 is saved with ID 1
             purchase_link="http://example.com/product-a",
             date=datetime.now()
         )
@@ -82,14 +85,14 @@ def seed_data():
             quantity=1,
             total_price=1000,
             status="Completed",
-            buyer_id=2,  # Assuming buyer2 is saved with ID 2
-            seller_id=2,  # Assuming seller2 is saved with ID 2
+            buyer_id=buyer2.id,  # Assuming buyer2 is saved with ID 2
+            seller_id=seller2.id,  # Assuming seller2 is saved with ID 2
             purchase_link="http://example.com/product-b",
             date=datetime.now()
         )
 
         # Add data to the session
-        db.session.add_all([admin1, admin2, seller1, seller2, buyer1, buyer2, transaction1, transaction2])
+        db.session.add_all([transaction1, transaction2])
 
         # Commit to the database
         db.session.commit()

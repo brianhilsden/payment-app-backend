@@ -1,9 +1,9 @@
 {
     "swagger": "2.0",
     "info": {
-      "description": "This is the API documentation for the multi-role authentication and transaction management system.",
+      "description": "This is the API documentation for the payment management system.",
       "version": "1.0.0",
-      "title": "Multi-role API"
+      "title": "Payment system API"
     },
     "host": "localhost:5555",
     "basePath": "/",

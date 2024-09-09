@@ -179,7 +179,8 @@ class TransactionClass(Resource):
             quantity = int(data.get("quantity")),
             total_price = int(data.get("total_price")),
             seller_id = current_user.id,
-            token = token
+            token = token,
+            purchase_link = f"http://192.168.100.4:3000/{token}"
 
         )
 

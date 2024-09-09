@@ -189,7 +189,7 @@ class TransactionClass(Resource):
         response = make_response(
             {
                 "transaction":transaction.to_dict(),
-                "transaction_link": f"https://payment-app-backend-lemon.vercel.app/transaction/{token}"
+                "transaction_link": f"http://192.168.100.4:3000/{token}"
             },
             201
         )

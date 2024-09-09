@@ -257,6 +257,30 @@
             }
           }
         }
+      },
+      "/transactionByToken/{token}": {
+        "get": {
+          "tags": ["Transaction"],
+          "summary": "Get transaction by token",
+          "description": "Fetch a specific transaction using a token.",
+          "parameters": [
+            {
+              "name": "token",
+              "in": "path",
+              "required": true,
+              "type": "string",
+              "description": "Token associated with the transaction"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Transaction found"
+            },
+            "404": {
+              "description": "Transaction not found"
+            }
+          }
+        }
       }
     },
     "securityDefinitions": {

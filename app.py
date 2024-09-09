@@ -123,7 +123,7 @@ api.add_resource(Login, "/login")
 
 
 class CheckSession(Resource):
-    """ @jwt_required() """
+    @jwt_required()
     def get(self):
         return make_response(current_user.to_dict(), 200)
 
@@ -167,7 +167,7 @@ class TransactionClass(Resource):
         transactions = Transaction.query.all()
         return make_response([transaction.to_dict() for transaction in transactions], 200)
 
-    """ @jwt_required() """
+    @jwt_required()
     def post(self):
         data = request.get_json()
         token = str(uuid.uuid4())

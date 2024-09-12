@@ -92,7 +92,7 @@ class Transaction(SerializerMixin,db.Model):
     quantity = db.Column(db.Integer)
     total_price = db.Column(db.Integer)
     date = db.Column(db.DateTime, default=datetime.now)
-    status = db.Column(db.String)
+    status = db.Column(db.String, default="Pending")
     buyer_id = db.Column(db.Integer, db.ForeignKey("buyers.id"))
     seller_id = db.Column(db.Integer, db.ForeignKey("sellers.id"))
     purchase_link = db.Column(db.String)

@@ -43,12 +43,15 @@ class SignUp(Resource):
         role = data.get("role")  
 
         if role == "Admin":
+            existing_user = Admin.query.filter_by(email=email).first()
+            if existing_user:
+                return make_response({"error": "Email already registered"}, 400)
             try:
                 user = Admin(
-                    username=name,
-                    email=email,
-                    phone_number=phone_number,
-                    
+                username=name,
+                email=email,
+                phone_number=phone_number,
+
                 )
                 user.password_hash=password
                 db.session.add(user)
@@ -60,6 +63,9 @@ class SignUp(Resource):
                 return {"error": e.args}, 422
             
         elif role == "Buyer":
+            existing_user = Buyer.query.filter_by(email=email).first()
+            if existing_user:
+                return make_response({"error": "Email already registered"}, 400)
             try:
                 user = Buyer(
                     username=name,
@@ -77,6 +83,9 @@ class SignUp(Resource):
                 return {"error": e.args}, 422
             
         elif role == "Seller":
+            existing_user = Seller.query.filter_by(email=email).first()
+            if existing_user:
+                return make_response({"error": "Email already registered"}, 400)
             try:
                 user = Seller(
                     username=name,

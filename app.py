@@ -36,7 +36,7 @@ class SignUp(Resource):
     def post(self):
         
         data = request.get_json()
-        name = data.get("username")
+        name = data.get("name")
         email = data.get("email")
         password = data.get("password")
         phone_number = data.get("phone_number")

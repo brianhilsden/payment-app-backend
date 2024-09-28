@@ -8,7 +8,7 @@ from flask_restful import Api,Resource
 from flask import request,make_response,jsonify
 from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
-from flask_swagger_ui import get_swaggerui_blueprint
+from flask_swagger_uig import get_swaggerui_blueprint
 from flask_cors import CORS
 
 
